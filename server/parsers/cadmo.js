@@ -6,7 +6,7 @@ import url from "url";
 export default async function parse() {
     const lectureStart = new Date(new Date().getFullYear(), 8, 25);
 
-    const baseUrl = "https://cadmo.ethz.ch/education/lectures/HS24/DA/index.html";
+    const baseUrl = "https://moodle-app2.let.ethz.ch/course/view.php?id=23362";
     const res = await fetch(baseUrl)
 
     if (!res.ok) {

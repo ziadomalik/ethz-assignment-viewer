@@ -4,7 +4,9 @@ export default async function parse() {
     // Set the start date of the assignments to September 17, 2024, as the first release date
     const lectureStart = new Date(2024, 8, 17);  // September is month 8 because months are 0-based in JavaScript Date
 
-    const baseUrl = "https://lec.inf.ethz.ch/infk/eprog/2024/exercises/sheets/";
+    // Base URL for the assignments root
+    const websiteBaseUrl = "https://lec.inf.ethz.ch/infk/eprog/2024/";
+    const assignmentBaseUrl = `${websiteBaseUrl}exercises/sheets/`;
 
     const currentDate = new Date(); // Get the current date
     const exercises = [];
@@ -16,7 +18,7 @@ export default async function parse() {
     // Iterate through all released assignments
     for (let i = 0; i <= weeksPassed; i++) {
         const assignmentName = `uebungsblatt${i}`;
-        const exercisePDF = `${baseUrl}${assignmentName}.pdf`;
+        const exercisePDF = `${assignmentBaseUrl}${assignmentName}.pdf`;
 
         // Calculate the release date of each assignment
         const assignmentDate = new Date(lectureStart);
@@ -29,17 +31,17 @@ export default async function parse() {
         // Create the assignment object and add it to the array
         exercises.push({
             exerciseName: assignmentName,  
-            exercisePDF,                  
-            solutionPDF: null,            
-            bonusLink: null,              
-            dueDate,                       
-            openLink: exercisePDF,        
+            exercisePDF,                   
+            solutionPDF: null,             
+            bonusLink: null,               
+            dueDate,                      
+            openLink: exercisePDF,         
         });
     }
 
     return {
-        exercises,
-        website: baseUrl,
+        exercises,                        // List of all the exercises generated
+        website: websiteBaseUrl,           // Root URL that redirects to the website
         video: "https://video.ethz.ch/lectures/d-infk/2024/autumn/252-0027-00L.html",  // Assuming this is the 2024 video link
     };
 }
