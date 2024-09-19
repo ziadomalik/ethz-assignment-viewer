@@ -6,7 +6,7 @@ import url from "url";
 export default async function parse() {
     const lectureStart = new Date(new Date().getFullYear(), 8, 25);
 
-    const baseUrl = "https://cadmo.ethz.ch/education/lectures/HS23/DA/index.html";
+    const baseUrl = "https://cadmo.ethz.ch/education/lectures/HS24/DA/index.html";
     const res = await fetch(baseUrl)
 
     if (!res.ok) {
@@ -40,6 +40,6 @@ export default async function parse() {
     return {
         exercises,
         website: baseUrl,
-        video: "https://video.ethz.ch/lectures/d-infk/2023/autumn/252-0026-00L.html",
+        video: "https://video.ethz.ch/lectures/d-infk/2024/autumn/252-0026-00L.html",
     };
 };

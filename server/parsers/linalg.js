@@ -36,7 +36,7 @@ function getLastDateFromString(inputString) {
 }
 
 export default async function parse() {
-    const baseUrl = "https://ti.inf.ethz.ch/ew/courses/LA23/index.html";
+    const baseUrl = "https://ti.inf.ethz.ch/ew/courses/LA24/index.html";
     const res = await fetch(baseUrl)
 
     if (!res.ok) {
@@ -59,8 +59,8 @@ export default async function parse() {
 
         const columns = $(element).find('td');
 
-        const exerciseName = $(columns[4]).find('a').text();
-        const exercisePDF = $(columns[4]).find('a').attr('href');
+        const exerciseName = $(columns[5]).find('a').text();
+        const exercisePDF = $(columns[5]).find('a').attr('href');
         const solutionPDF = $(columns[5]).find('a').attr('href');
         const bonusLink = $(columns[6]).find('a').attr('href');
         const dueDate = getLastDateFromString($(columns[1]).text());
@@ -70,7 +70,7 @@ export default async function parse() {
         rows.push({
             exerciseName,
             exercisePDF,
-            solutionPDF,
+            solutionPDF: null,    
             bonusLink,
             dueDate,
         });
@@ -81,7 +81,7 @@ export default async function parse() {
     return { 
         exercises,
         website: baseUrl,
-        video: "https://video.ethz.ch/lectures/d-math/2023/autumn/401-0131-00L.html",
+        video: "https://video.ethz.ch/lectures/d-math/2024/autumn/401-0131-00L.html",
     };
 };
 

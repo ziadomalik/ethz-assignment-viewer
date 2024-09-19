@@ -19,7 +19,7 @@
     <div class="flex flex-col px-2">
         <span class="text-xl font-semibold text-primary-500">Diskrete Mathematik</span>
         <div class="flex gap-2 my-4">
-            <UButton color="gray" icon="i-heroicons-globe-alt" label="Website" to="https://crypto.ethz.ch/teaching/DM23/" target="_blank" />
+            <UButton color="gray" icon="i-heroicons-globe-alt" label="Website" to="https://crypto.ethz.ch/teaching/DM24/" target="_blank" />
             <!-- @vue-ignore -->
             <UButton color="gray" icon="i-heroicons-video-camera" label="Video Lectures" to="https://video.ethz.ch/lectures/d-infk/2023/autumn/252-0025-01L.html" target="_blank" />
         </div>
