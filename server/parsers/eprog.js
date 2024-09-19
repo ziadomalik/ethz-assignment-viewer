@@ -1,72 +1,45 @@
-// Copyright 2023 Ziad Malik
-
 import * as cheerio from "cheerio";
 
-function extractDateFromString(inputString) {
-  // Get the current year
-  const currentYear = new Date().getFullYear();
-
-  // Extract the day and month from the input string
-  const match = inputString.match(/(\d{1,2})\.(\d{1,2})\./);
-
-  if (match) {
-    // Extracted day and month
-    const day = parseInt(match[1]);
-    const month = parseInt(match[2]) - 1; // Subtract 1 to adjust for zero-based months
-
-    // Create a Date object with the extracted day, month, and current year
-    const dateObject = new Date(currentYear, month, day);
-
-    return dateObject;
-  }
-
-  // Return null if no valid date was found in the input string
-  return null;
-}
-
 export default async function parse() {
-    const baseUrl = "https://www.lst.inf.ethz.ch/education/einfuehrung-in-die-programmierung-i--252-0027-1/_jcr_content/par/accordion/accordionitem_753370236/par/table.tableComp.json";
-    const website = "https://www.lst.inf.ethz.ch/education/einfuehrung-in-die-programmierung-i--252-0027-1.html"
-    const res = await fetch(baseUrl)
+    // Set the start date of the assignments to September 17, 2024, as the first release date
+    const lectureStart = new Date(2024, 8, 17);  // September is month 8 because months are 0-based in JavaScript Date
 
-    if (!res.ok) {
-        console.log('Response not OK');
-        return;
-    }
+    const baseUrl = "https://lec.inf.ethz.ch/infk/eprog/2024/exercises/sheets/";
 
+    const currentDate = new Date(); // Get the current date
     const exercises = [];
 
-    const tableContents = await res.json();
-    tableContents.tbody.rows.forEach(row => {
+    // Calculate how many assignments have been released so far
+    const timeDiff = currentDate - lectureStart; // Time difference between the current date and the start date
+    const weeksPassed = Math.floor(timeDiff / (7 * 24 * 60 * 60 * 1000)); // Number of full weeks that have passed
 
-        const content = row.cells[0].content;
+    // Iterate through all released assignments
+    for (let i = 0; i <= weeksPassed; i++) {
+        const assignmentName = `uebungsblatt${i}`;
+        const exercisePDF = `${baseUrl}${assignmentName}.pdf`;
 
-        if (!content.includes("href")) {
-            return;
-        }
+        // Calculate the release date of each assignment
+        const assignmentDate = new Date(lectureStart);
+        assignmentDate.setDate(lectureStart.getDate() + i * 7); // Released every Tuesday
 
+        // Set the due date to 7 days after the release date
+        const dueDate = new Date(assignmentDate);
+        dueDate.setDate(assignmentDate.getDate() + 7);
 
-        const $ = cheerio.load(content);
-
-        // Regular expression to match "Übung N" where N is a digit(s)
-        const regex = /Übung \d+/;
-        const bonusRegex = /Bonusaufgabe Ü\d+/
-
-        const exerciseName = $('a').text().match(regex) ? $('a').text().match(regex)[0] : $('a').text().match(bonusRegex)[0];
-        const exercisePDF = $('a').attr('href');
-
+        // Create the assignment object and add it to the array
         exercises.push({
-            exerciseName,
-            exercisePDF,
-            solutionPDF: null,
-            bonusLink: null,
-            dueDate: extractDateFromString(row.cells[2].content),
-        })
-    })
+            exerciseName: assignmentName,  
+            exercisePDF,                  
+            solutionPDF: null,            
+            bonusLink: null,              
+            dueDate,                       
+            openLink: exercisePDF,        
+        });
+    }
 
-    return { 
+    return {
         exercises,
-        website,
-        video: "https://video.ethz.ch/lectures/d-infk/2023/autumn/252-0027-00L.html",
+        website: baseUrl,
+        video: "https://video.ethz.ch/lectures/d-infk/2024/autumn/252-0027-00L.html",  // Assuming this is the 2024 video link
     };
-};
+}
